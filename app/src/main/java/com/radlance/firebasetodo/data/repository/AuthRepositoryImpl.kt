@@ -36,30 +36,28 @@ class AuthRepositoryImpl @Inject constructor() : AuthRepository {
             .setValue(User(name, email, profileImage))
     }
 
-    override suspend fun loadUserImage(imageUrl: Uri): FireBaseResult {
-        return try {
-            val storage = Firebase.storage.getReference().child(getStorageUrl(Firebase.auth.currentUser!!.uid))
-            storage.putFile(imageUrl).await()
-            val downloadUri = storage.downloadUrl.await()
-            FirebaseDatabase
-                .getInstance(DATABASE_REFERENCE)
-                .getReference(MANAGEMENT_KEY)
-                .child(CHILD_USER)
-                .child(Firebase.auth.currentUser!!.uid)
-                .child(PROFILE_IMAGE).setValue(downloadUri.toString()).await()
-            FireBaseResult.Success(downloadUri.toString())
-        } catch (e: Exception) {
-            FireBaseResult.Error(e.message ?: "error")
-        }
-    }
-
-    override suspend fun updateUserInfo(name: String, email: String): FireBaseResult {
+    override suspend fun loadUserInfo(name: String, email: String, imageUrl: Uri): FireBaseResult {
         return try {
             val database = FirebaseDatabase.getInstance(DATABASE_REFERENCE).getReference(MANAGEMENT_KEY)
             val userRef = database.child(CHILD_USER).child(Firebase.auth.currentUser!!.uid)
+            if (imageUrl != Uri.EMPTY) {
+                val storage = Firebase.storage.getReference().child(getStorageUrl(Firebase.auth.currentUser!!.uid))
+                storage.putFile(imageUrl).await()
+                val downloadUri = storage.downloadUrl.await()
+                userRef.child(PROFILE_IMAGE).setValue(downloadUri.toString())
+                FireBaseResult.Success(downloadUri.toString())
+            }
+
             userRef.child(NAME).setValue(name).await()
             userRef.child(EMAIL).setValue(email).await()
             FireBaseResult.Success(Unit)
+//            FirebaseDatabase
+//                .getInstance(DATABASE_REFERENCE)
+//                .getReference(MANAGEMENT_KEY)
+//                .child(CHILD_USER)
+//                .child(Firebase.auth.currentUser!!.uid)
+//                .child(PROFILE_IMAGE).setValue(downloadUri.toString()).await()
+
         } catch (e: Exception) {
             FireBaseResult.Error(e.message ?: "error")
         }

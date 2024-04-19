@@ -101,9 +101,17 @@ class EditProfileFragment : Fragment() {
 
     private fun saveNewUserInfo() {
         val imageUrl = if (imageUri.isNotBlank()) {
-            profileViewModel.loadImageUri(Uri.parse(imageUri))
+            profileViewModel.loadImageUri(
+                name = binding.etName.text.toString(),
+                email = binding.etEmail.text.toString(),
+                imageUri = Uri.parse(imageUri)
+            )
             imageUri
         } else {
+            profileViewModel.loadImageUri(
+                name = binding.etName.text.toString(),
+                email = binding.etEmail.text.toString()
+            )
             user.imageUrl
         }
         val user = User(

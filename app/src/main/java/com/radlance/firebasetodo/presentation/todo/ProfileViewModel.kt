@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.radlance.firebasetodo.domain.FireBaseResult
-import com.radlance.firebasetodo.domain.usecase.LoadUserImageUseCase
+import com.radlance.firebasetodo.domain.usecase.UpdateUserInfoUseCase
 import com.radlance.firebasetodo.domain.usecase.LoadUserInfoUseCase
 import com.radlance.firebasetodo.presentation.auth.FireBaseUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val loadUserInfoUseCase: LoadUserInfoUseCase,
-    private val loadUserImageUseCase: LoadUserImageUseCase,
+    private val updateUserInfoUseCase: UpdateUserInfoUseCase,
     private val mapper: FireBaseResult.Mapper<FireBaseUiState>
 ) : ViewModel() {
     private val _isSuccessfulLoadUserInfo = MutableLiveData<FireBaseUiState>()
@@ -35,9 +35,9 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun loadImageUri(imageUri: Uri) {
+    fun loadImageUri(name: String, email: String, imageUri: Uri = Uri.EMPTY) {
         viewModelScope.launch {
-            val loadResult = loadUserImageUseCase(imageUri)
+            val loadResult = updateUserInfoUseCase(name, email, imageUri)
             val uiState = loadResult.map(mapper)
             _isSuccessfulLoadUserImage.value = uiState
         }

@@ -9,6 +9,5 @@ interface AuthRepository {
     fun isUserAuthenticated(): Boolean
     fun logoutUser()
     fun forgetPassword(email: String): FireBaseResult
-    suspend fun loadUserImage(imageUrl: Uri): FireBaseResult
-    suspend fun updateUserInfo(name: String, email: String): FireBaseResult
+    suspend fun loadUserInfo(name: String, email: String, imageUrl: Uri): FireBaseResult
 }
