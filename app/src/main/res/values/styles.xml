@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TitleStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textFontWeight">600</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="DescriptionStyle">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <style name="ButtonStyle">
+        <item name="backgroundTint">@color/buttonEnabledColor</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginBottom">68dp</item>
+        <item name="android:layout_marginStart">25dp</item>
+        <item name="android:layout_marginEnd">25dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="Theme.BottomNavigationView.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/invisibleColor</item>
+    </style>
+</resources>
