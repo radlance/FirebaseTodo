@@ -4,9 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,7 +18,6 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.radlance.firebasetodo.R
 import com.radlance.firebasetodo.databinding.FragmentEditProfileBinding
-import com.radlance.firebasetodo.domain.FireBaseResult
 import com.radlance.firebasetodo.domain.entity.User
 import com.radlance.firebasetodo.presentation.auth.FireBaseUiState
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,8 +47,11 @@ class EditProfileFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        handleInputErrors()
+        setupChangedListeners()
         binding.ivBackButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
@@ -58,8 +63,23 @@ class EditProfileFragment : Fragment() {
 
         binding.buttonSave.setOnClickListener {
             saveNewUserInfo()
-            binding.buttonSave.text = getString(R.string.saving)
         }
+    }
+    private fun setupChangedListeners() {
+        setTextChangedListener(binding.etName, profileViewModel::resetInputName)
+        setTextChangedListener(binding.etEmail, profileViewModel::resetErrorInputEmail)
+    }
+
+    private fun setTextChangedListener(editText: EditText, resetErrorFunction: () -> Unit) {
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                resetErrorFunction.invoke()
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
     @Suppress("DEPRECATION")
@@ -101,14 +121,14 @@ class EditProfileFragment : Fragment() {
 
     private fun saveNewUserInfo() {
         val imageUrl = if (imageUri.isNotBlank()) {
-            profileViewModel.loadImageUri(
+            profileViewModel.uploadImageUri(
                 name = binding.etName.text.toString(),
                 email = binding.etEmail.text.toString(),
                 imageUri = Uri.parse(imageUri)
             )
             imageUri
         } else {
-            profileViewModel.loadImageUri(
+            profileViewModel.uploadImageUri(
                 name = binding.etName.text.toString(),
                 email = binding.etEmail.text.toString()
             )
@@ -120,6 +140,7 @@ class EditProfileFragment : Fragment() {
             imageUrl = imageUrl
         )
         profileViewModel.isSuccessfulLoadUserImage.observe(viewLifecycleOwner) {
+            binding.buttonSave.text = getString(R.string.saving)
             when (it) {
                 is FireBaseUiState.Success<*> -> {
                     requireActivity().supportFragmentManager.apply {
@@ -138,8 +159,29 @@ class EditProfileFragment : Fragment() {
                         getText(R.string.error_saving),
                         Toast.LENGTH_LONG
                     ).show()
+                    binding.buttonSave.text = getString(R.string.save)
                 }
             }
+        }
+    }
+
+    private fun handleInputErrors() {
+        profileViewModel.errorInputEmail.observe(viewLifecycleOwner) {
+            val message = if (it) {
+                getString(R.string.error_input_email)
+            } else {
+                null
+            }
+            binding.tilEmail.error = message
+        }
+
+        profileViewModel.errorInputName.observe(viewLifecycleOwner) {
+            val message = if (it) {
+                getString(R.string.error_input_name)
+            } else {
+                null
+            }
+            binding.tilName.error = message
         }
     }
 

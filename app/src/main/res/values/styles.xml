@@ -23,6 +23,6 @@
         <item name="android:textColor">@color/white</item>
     </style>
     <style name="Theme.BottomNavigationView.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">@color/invisibleColor</item>
+        <item name="android:color">@color/bottomItemColor</item>
     </style>
 </resources>

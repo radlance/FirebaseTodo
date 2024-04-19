@@ -6,5 +6,6 @@
     <color name="boldOrangeText">#ad491e</color>
     <color name="invisibleColor">#00000000</color>
     <color name="darkRed">#8B0000</color>
+    <color name="bottomItemColor">#f0f0f0</color>
 </resources>
 

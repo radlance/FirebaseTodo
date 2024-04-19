@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.radlance.firebasetodo.domain.FireBaseResult
 import com.radlance.firebasetodo.domain.usecase.RegisterUserUseCase
+import com.radlance.firebasetodo.presentation.utils.validateFireBaseEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,8 +16,6 @@ class RegistrationViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase,
     private val mapper: FireBaseResult.Mapper<FireBaseUiState>
 ) : ViewModel() {
-    private val emailRegex =
-        Regex("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$")
 
     private val _isSuccessfulRegistration = MutableLiveData<FireBaseUiState>()
     val isSuccessfulRegistration: LiveData<FireBaseUiState>
@@ -71,7 +70,7 @@ class RegistrationViewModel @Inject constructor(
             return false
         }
 
-        if (email.isBlank() || !email.matches(emailRegex)) {
+        if (email.isBlank() || !validateFireBaseEmail(email)) {
             _errorInputEmail.value = true
             return false
         }
@@ -91,11 +90,19 @@ class RegistrationViewModel @Inject constructor(
 
     private fun parseString(string: String?): String = string?.trim() ?: ""
 
+    fun resetInputName() {
+        _errorInputName.value = false
+    }
+
     fun resetErrorInputEmail() {
         _errorInputEmail.value = false
     }
 
     fun resetErrorInputPassword() {
+        _errorInputPassword.value = false
+    }
+
+    fun resetErrorInputConfirmPassword() {
         _errorInputPassword.value = false
     }
 }

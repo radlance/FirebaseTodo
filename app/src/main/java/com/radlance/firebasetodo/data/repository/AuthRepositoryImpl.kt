@@ -1,7 +1,6 @@
 package com.radlance.firebasetodo.data.repository
 
 import android.net.Uri
-import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase

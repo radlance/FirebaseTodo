@@ -9,6 +9,7 @@ import com.radlance.firebasetodo.domain.FireBaseResult
 import com.radlance.firebasetodo.domain.usecase.UpdateUserInfoUseCase
 import com.radlance.firebasetodo.domain.usecase.LoadUserInfoUseCase
 import com.radlance.firebasetodo.presentation.auth.FireBaseUiState
+import com.radlance.firebasetodo.presentation.utils.validateFireBaseEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,6 +27,28 @@ class ProfileViewModel @Inject constructor(
     private val _isSuccessfulLoadUserImage = MutableLiveData<FireBaseUiState>()
     val isSuccessfulLoadUserImage: LiveData<FireBaseUiState>
         get() = _isSuccessfulLoadUserImage
+    private val _errorInputName = MutableLiveData<Boolean>()
+
+    val errorInputName: LiveData<Boolean>
+        get() = _errorInputName
+
+    private val _errorInputEmail = MutableLiveData<Boolean>()
+    val errorInputEmail: LiveData<Boolean>
+        get() = _errorInputEmail
+
+    private fun validateInput(name: String, email: String): Boolean {
+        val result = true
+        if (name.isBlank()) {
+            _errorInputName.value = true
+            return false
+        }
+
+        if(email.isBlank() || !validateFireBaseEmail(email)) {
+            _errorInputEmail.value = true
+            return false
+        }
+        return result
+    }
 
     fun loadUserInfo() {
         viewModelScope.launch {
@@ -35,13 +58,26 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun loadImageUri(name: String, email: String, imageUri: Uri = Uri.EMPTY) {
-        viewModelScope.launch {
-            val loadResult = updateUserInfoUseCase(name, email, imageUri)
-            val uiState = loadResult.map(mapper)
-            _isSuccessfulLoadUserImage.value = uiState
+    fun uploadImageUri(name: String, email: String, imageUri: Uri = Uri.EMPTY) {
+        val formattedName = parseString(name)
+        val formattedEmail = parseString(email)
+        if (validateInput(formattedName, formattedEmail)) {
+            viewModelScope.launch {
+                val loadResult = updateUserInfoUseCase(formattedName, formattedEmail, imageUri)
+                val uiState = loadResult.map(mapper)
+                _isSuccessfulLoadUserImage.value = uiState
+            }
         }
     }
 
+    private fun parseString(string: String?): String = string?.trim() ?: ""
+
+    fun resetInputName() {
+        _errorInputName.value = false
+    }
+
+    fun resetErrorInputEmail() {
+        _errorInputEmail.value = false
+    }
     //TODO доделать загрузку изображений (intent, state, storage)
 }

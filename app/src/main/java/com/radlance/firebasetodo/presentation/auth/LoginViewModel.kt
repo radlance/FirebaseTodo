@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.radlance.firebasetodo.domain.FireBaseResult
 import com.radlance.firebasetodo.domain.usecase.LoginUserUseCase
+import com.radlance.firebasetodo.presentation.utils.validateFireBaseEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,8 +16,6 @@ class LoginViewModel @Inject constructor(
     private val loginUserUseCase: LoginUserUseCase,
     private val mapper: FireBaseResult.Mapper<FireBaseUiState>
 ) : ViewModel() {
-    private val emailRegex =
-        Regex("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$")
     private val _errorInputEmail = MutableLiveData<Boolean>()
     val errorInputEmail: LiveData<Boolean>
         get() = _errorInputEmail
@@ -31,7 +30,7 @@ class LoginViewModel @Inject constructor(
 
     private fun validateInput(email: String, password: String): Boolean {
         val result = true
-        if (email.isBlank() || !email.matches(emailRegex)) {
+        if (email.isBlank() || !validateFireBaseEmail(email)) {
             _errorInputEmail.value = true
 
             return false
