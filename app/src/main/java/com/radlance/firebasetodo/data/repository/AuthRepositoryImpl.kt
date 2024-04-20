@@ -1,10 +1,8 @@
 package com.radlance.firebasetodo.data.repository
 
-import android.net.Uri
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import com.radlance.firebasetodo.domain.FireBaseResult
 import com.radlance.firebasetodo.domain.entity.User
 import com.radlance.firebasetodo.domain.repository.AuthRepository
@@ -35,32 +33,7 @@ class AuthRepositoryImpl @Inject constructor() : AuthRepository {
             .setValue(User(name, email, profileImage))
     }
 
-    override suspend fun loadUserInfo(name: String, email: String, imageUrl: Uri): FireBaseResult {
-        return try {
-            val database = FirebaseDatabase.getInstance(DATABASE_REFERENCE).getReference(MANAGEMENT_KEY)
-            val userRef = database.child(CHILD_USER).child(Firebase.auth.currentUser!!.uid)
-            if (imageUrl != Uri.EMPTY) {
-                val storage = Firebase.storage.getReference().child(getStorageUrl(Firebase.auth.currentUser!!.uid))
-                storage.putFile(imageUrl).await()
-                val downloadUri = storage.downloadUrl.await()
-                userRef.child(PROFILE_IMAGE).setValue(downloadUri.toString())
-                FireBaseResult.Success(downloadUri.toString())
-            }
 
-            userRef.child(NAME).setValue(name).await()
-            userRef.child(EMAIL).setValue(email).await()
-            FireBaseResult.Success(Unit)
-//            FirebaseDatabase
-//                .getInstance(DATABASE_REFERENCE)
-//                .getReference(MANAGEMENT_KEY)
-//                .child(CHILD_USER)
-//                .child(Firebase.auth.currentUser!!.uid)
-//                .child(PROFILE_IMAGE).setValue(downloadUri.toString()).await()
-
-        } catch (e: Exception) {
-            FireBaseResult.Error(e.message ?: "error")
-        }
-    }
 
     override suspend fun loginUser(email: String, password: String): FireBaseResult {
         return try {
@@ -89,20 +62,14 @@ class AuthRepositoryImpl @Inject constructor() : AuthRepository {
         }
     }
 
-
-
-    private fun getStorageUrl(uId: String): String {
-        return IMAGES_PATH + uId
-    }
-
     companion object {
-        private const val NAME = "name"
-        private const val EMAIL = "email"
+        const val NAME = "name"
+        const val EMAIL = "email"
         const val DATABASE_REFERENCE =
             "https://fir-todo-b41b5-default-rtdb.europe-west1.firebasedatabase.app/"
         const val MANAGEMENT_KEY = "Management"
         const val CHILD_USER = "users"
-        private const val PROFILE_IMAGE = "imageUrl"
-        private const val IMAGES_PATH = "/images"
+        const val PROFILE_IMAGE = "imageUrl"
+        const val IMAGES_PATH = "/images"
     }
 }

@@ -46,4 +46,7 @@
     <string name="delete_account">Delete account</string>
     <string name="saving">Saving…</string>
     <string name="error_saving">Failure saving new data</string>
+    <string name="delete_warning">Are you sure you want to delete your account?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
 </resources>

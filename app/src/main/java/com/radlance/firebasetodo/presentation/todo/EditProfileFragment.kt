@@ -1,6 +1,7 @@
 package com.radlance.firebasetodo.presentation.todo
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,10 +14,12 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.radlance.firebasetodo.R
+import com.radlance.firebasetodo.databinding.ConfirmationDialogBinding
 import com.radlance.firebasetodo.databinding.FragmentEditProfileBinding
 import com.radlance.firebasetodo.domain.entity.User
 import com.radlance.firebasetodo.presentation.auth.FireBaseUiState
@@ -29,6 +32,8 @@ class EditProfileFragment : Fragment() {
     private lateinit var user: User
     private var imageUri = ""
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var dialog: Dialog
+    private lateinit var dialogBinding: ConfirmationDialogBinding
     private val binding: FragmentEditProfileBinding
         get() = _binding ?: throw RuntimeException("EditProfileFragment == null")
 
@@ -50,6 +55,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupDialogProperties()
         handleInputErrors()
         setupChangedListeners()
         binding.ivBackButton.setOnClickListener {
@@ -64,7 +70,12 @@ class EditProfileFragment : Fragment() {
         binding.buttonSave.setOnClickListener {
             saveNewUserInfo()
         }
+
+        binding.tvDeleteAccount.setOnClickListener {
+            dialog.show()
+        }
     }
+
     private fun setupChangedListeners() {
         setTextChangedListener(binding.etName, profileViewModel::resetInputName)
         setTextChangedListener(binding.etEmail, profileViewModel::resetErrorInputEmail)
@@ -182,6 +193,34 @@ class EditProfileFragment : Fragment() {
                 null
             }
             binding.tilName.error = message
+        }
+    }
+
+    private fun setupDialogProperties() {
+        dialogBinding = ConfirmationDialogBinding.inflate(layoutInflater)
+        val dialog = Dialog(dialogBinding.root.context)
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialog.window?.setBackgroundDrawable(
+            AppCompatResources.getDrawable(
+                requireActivity().applicationContext,
+                R.drawable.dialog_background
+            )
+        )
+        setDialogButtonsClickListeners()
+        this.dialog = dialog
+    }
+
+    private fun setDialogButtonsClickListeners() {
+        dialogBinding.buttonCancel.setOnClickListener {
+            dialog.hide()
+        }
+
+        dialogBinding.buttonDelete.setOnClickListener {
+            profileViewModel.deleteUser()
         }
     }
 

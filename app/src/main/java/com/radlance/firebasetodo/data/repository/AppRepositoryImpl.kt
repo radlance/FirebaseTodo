@@ -1,8 +1,10 @@
 package com.radlance.firebasetodo.data.repository
 
+import android.net.Uri
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.radlance.firebasetodo.domain.FireBaseResult
 import com.radlance.firebasetodo.domain.entity.User
 import com.radlance.firebasetodo.domain.repository.AppRepository
@@ -28,9 +30,38 @@ class AppRepositoryImpl @Inject constructor(): AppRepository {
         }
     }
 
+    override suspend fun loadUserInfo(name: String, email: String, imageUrl: Uri): FireBaseResult {
+        return try {
+            val database = FirebaseDatabase.getInstance(AuthRepositoryImpl.DATABASE_REFERENCE).getReference(
+                AuthRepositoryImpl.MANAGEMENT_KEY
+            )
+            val userRef = database.child(AuthRepositoryImpl.CHILD_USER).child(Firebase.auth.currentUser!!.uid)
+            if (imageUrl != Uri.EMPTY) {
+                val storage = Firebase.storage.getReference().child(getStorageUrl(Firebase.auth.currentUser!!.uid))
+                storage.putFile(imageUrl).await()
+                val downloadUri = storage.downloadUrl.await()
+                userRef.child(AuthRepositoryImpl.PROFILE_IMAGE).setValue(downloadUri.toString())
+                FireBaseResult.Success(downloadUri.toString())
+            }
+            userRef.child(AuthRepositoryImpl.NAME).setValue(name).await()
+            userRef.child(AuthRepositoryImpl.EMAIL).setValue(email).await()
+            FireBaseResult.Success(Unit)
 
-    companion object {
-        private const val NAME = "name"
-        private const val EMAIL = "email"
+        } catch (e: Exception) {
+            FireBaseResult.Error(e.message ?: "error")
+        }
+    }
+
+    override fun deleteUser(): FireBaseResult {
+        return try {
+            Firebase.auth.currentUser?.delete()
+            FireBaseResult.Success(Unit)
+        } catch (e: Exception) {
+            FireBaseResult.Error(e.message.toString())
+        }
+    }
+
+    private fun getStorageUrl(uId: String): String {
+        return AuthRepositoryImpl.IMAGES_PATH + uId
     }
 }

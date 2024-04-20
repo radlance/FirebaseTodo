@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.radlance.firebasetodo.domain.FireBaseResult
+import com.radlance.firebasetodo.domain.usecase.DeleteUserUseCase
 import com.radlance.firebasetodo.domain.usecase.UpdateUserInfoUseCase
 import com.radlance.firebasetodo.domain.usecase.LoadUserInfoUseCase
 import com.radlance.firebasetodo.presentation.auth.FireBaseUiState
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val loadUserInfoUseCase: LoadUserInfoUseCase,
     private val updateUserInfoUseCase: UpdateUserInfoUseCase,
+    private val deleteUserUseCase: DeleteUserUseCase,
     private val mapper: FireBaseResult.Mapper<FireBaseUiState>
 ) : ViewModel() {
     private val _isSuccessfulLoadUserInfo = MutableLiveData<FireBaseUiState>()
@@ -79,5 +81,8 @@ class ProfileViewModel @Inject constructor(
     fun resetErrorInputEmail() {
         _errorInputEmail.value = false
     }
-    //TODO доделать загрузку изображений (intent, state, storage)
+
+    fun deleteUser() {
+        deleteUserUseCase()
+    }
 }
