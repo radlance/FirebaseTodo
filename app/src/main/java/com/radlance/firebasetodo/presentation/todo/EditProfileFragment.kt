@@ -78,7 +78,7 @@ class EditProfileFragment : Fragment() {
 
     private fun setupChangedListeners() {
         setTextChangedListener(binding.etName, profileViewModel::resetInputName)
-        setTextChangedListener(binding.etEmail, profileViewModel::resetErrorInputEmail)
+//        setTextChangedListener(binding.etEmail, profileViewModel::resetErrorInputEmail)
     }
 
     private fun setTextChangedListener(editText: EditText, resetErrorFunction: () -> Unit) {
@@ -102,7 +102,7 @@ class EditProfileFragment : Fragment() {
 
     private fun setupUserInfo() {
         binding.etName.setText(user.name)
-        binding.etEmail.setText(user.email)
+//        binding.etEmail.setText(user.email)
         if (user.imageUrl.isNotBlank()) {
             Glide.with(this).load(user.imageUrl).into(binding.ivProfileIcon)
             binding.ivEmptyImage.visibility = View.INVISIBLE
@@ -134,20 +134,20 @@ class EditProfileFragment : Fragment() {
         val imageUrl = if (imageUri.isNotBlank()) {
             profileViewModel.uploadImageUri(
                 name = binding.etName.text.toString(),
-                email = binding.etEmail.text.toString(),
+                email = user.email.toString(),
                 imageUri = Uri.parse(imageUri)
             )
             imageUri
         } else {
             profileViewModel.uploadImageUri(
                 name = binding.etName.text.toString(),
-                email = binding.etEmail.text.toString()
+                email = user.email.toString()
             )
             user.imageUrl
         }
         val user = User(
             name = binding.etName.text.toString(),
-            email = binding.etEmail.text.toString(),
+            email = user.email.toString(),
             imageUrl = imageUrl
         )
         profileViewModel.isSuccessfulLoadUserImage.observe(viewLifecycleOwner) {
@@ -177,14 +177,6 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun handleInputErrors() {
-        profileViewModel.errorInputEmail.observe(viewLifecycleOwner) {
-            val message = if (it) {
-                getString(R.string.error_input_email)
-            } else {
-                null
-            }
-            binding.tilEmail.error = message
-        }
 
         profileViewModel.errorInputName.observe(viewLifecycleOwner) {
             val message = if (it) {
