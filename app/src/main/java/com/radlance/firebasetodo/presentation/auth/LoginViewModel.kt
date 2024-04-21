@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUserUseCase: LoginUserUseCase,
-    private val mapper: FireBaseResult.Mapper<FireBaseUiState>
+    private val mapper: FireBaseResult.Mapper<FireBaseUiState>,
 ) : ViewModel() {
     private val _errorInputEmail = MutableLiveData<Boolean>()
     val errorInputEmail: LiveData<Boolean>

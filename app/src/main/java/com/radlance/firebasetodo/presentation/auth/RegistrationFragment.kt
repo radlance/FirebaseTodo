@@ -111,9 +111,10 @@ class RegistrationFragment : Fragment() {
         viewModel.isSuccessfulRegistration.observe(viewLifecycleOwner) {
             when (it) {
                 is FireBaseUiState.Success<*> -> {
-                    val intent =
-                        Intent(requireActivity().applicationContext, MainActivity::class.java)
-                    startActivity(intent)
+//                    val intent =
+//                        Intent(requireActivity().applicationContext, MainActivity::class.java)
+//                    startActivity(intent)
+                    launchConfirmEmailFragment()
                 }
 
                 is FireBaseUiState.Error -> it.showErrorMessage(requireActivity().applicationContext)
@@ -125,6 +126,13 @@ class RegistrationFragment : Fragment() {
         requireActivity().supportFragmentManager
             .beginTransaction()
             .replace(R.id.container_auth, LoginFragment.newInstance())
+            .commit()
+    }
+
+    private fun launchConfirmEmailFragment() {
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.container_auth, ConfirmEmailFragment.newInstance())
             .addToBackStack(null)
             .commit()
     }

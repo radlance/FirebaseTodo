@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.radlance.firebasetodo.R
@@ -33,6 +34,9 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            requireActivity().finish()
+        }
         binding.tvSingIn.setOnClickListener {
             launchRegistrationFragment()
         }
@@ -77,7 +81,6 @@ class LoginFragment : Fragment() {
             .supportFragmentManager
             .beginTransaction()
             .replace(R.id.container_auth, ForgetPasswordFragment.newInstance())
-            .addToBackStack(null)
             .commit()
     }
 

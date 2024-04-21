@@ -1,5 +1,8 @@
 package com.radlance.firebasetodo.data.repository
 
+import android.content.ContentValues.TAG
+import android.util.Log
+import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
@@ -33,19 +36,44 @@ class AuthRepositoryImpl @Inject constructor() : AuthRepository {
             .setValue(User(name, email, profileImage))
     }
 
-
+    override suspend fun sendConfirmEmail(): FireBaseResult {
+        return try {
+//            Firebase.auth.sendSignInLinkToEmail(
+//                email!!,
+//                ActionCodeSettings.newBuilder()
+//                    .setUrl("https://fir-todo-b41b5.web.app/")
+//                    .setHandleCodeInApp(true)
+//                    .build()
+//                    //TODO вынести константы, сделать viewModel
+//            ).addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    FireBaseResult.Success(Unit)
+//                } else {
+//                    FireBaseResult.Error(task.exception.toString())
+//                }
+//            }
+            Firebase.auth.currentUser?.sendEmailVerification()?.await()
+            FireBaseResult.Success(Unit)
+        } catch (e: Exception) {
+            FireBaseResult.Error(e.message.toString())
+        }
+    }
 
     override suspend fun loginUser(email: String, password: String): FireBaseResult {
         return try {
             Firebase.auth.signInWithEmailAndPassword(email, password).await()
-            FireBaseResult.Success(Unit)
+            if(Firebase.auth.currentUser?.isEmailVerified == true) {
+                FireBaseResult.Success(Unit)
+            } else {
+                FireBaseResult.Error("email not confirmed")
+            }
         } catch (e: Exception) {
             FireBaseResult.Error(e.message ?: "error")
         }
     }
 
     override fun isUserAuthenticated(): Boolean {
-        return Firebase.auth.currentUser != null
+        return Firebase.auth.currentUser != null && Firebase.auth.currentUser?.isEmailVerified == true
     }
 
     override fun logoutUser() {
@@ -56,8 +84,7 @@ class AuthRepositoryImpl @Inject constructor() : AuthRepository {
         return try {
             Firebase.auth.sendPasswordResetEmail(email)
             FireBaseResult.Success(Unit)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             FireBaseResult.Error(e.message ?: "error")
         }
     }

@@ -28,12 +28,11 @@
             android:layout_marginTop="25dp"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingStart="45dp"
-            android:paddingEnd="45dp"
             app:layout_constraintBottom_toTopOf="@id/iv_reset_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed">
 
             <TextView
                 android:id="@+id/tv_forget_password"
@@ -41,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/forget_password_question" />
+                android:text="@string/confirm_your_email" />
 
             <TextView
                 android:id="@+id/tv_description"
@@ -49,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/reset_password_description" />
+                android:text="@string/confirmation_email" />
 
         </LinearLayout>
 
@@ -59,40 +58,20 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:contentDescription="@string/reset_password"
-            android:src="@drawable/ic_reset_password"
-            app:layout_constraintBottom_toBottomOf="@id/til_email"
+            android:padding="25dp"
+            android:src="@drawable/ic_confirm_email"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.494"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ll_title" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_email"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toTopOf="@id/button_send"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_reset_password"
-            app:layout_constraintVertical_chainStyle="packed">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_regular"
-                android:hint="@string/email_hint"
-                android:inputType="textEmailAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
-
         <Button
-            android:id="@+id/button_send"
+            android:id="@+id/button_login"
             style="@style/ButtonStyle"
             android:layout_width="0dp"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
-            android:text="@string/send_message"
+            android:text="@string/login"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

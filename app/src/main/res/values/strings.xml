@@ -49,4 +49,6 @@
     <string name="delete_warning">Are you sure you want to delete your account?</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="confirm_your_email">Confirm your email address</string>
+    <string name="confirmation_email">We will send confirmation link on your email</string>
 </resources>

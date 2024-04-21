@@ -4,6 +4,7 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="colorPrimary">@color/buttonEnabledColor</item>
+        <item name="color">@color/black</item>
     </style>
 
     <style name="Theme.FirebaseTodo" parent="Base.Theme.FirebaseTodo" />
