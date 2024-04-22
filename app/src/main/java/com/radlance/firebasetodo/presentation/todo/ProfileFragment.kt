@@ -1,6 +1,5 @@
 package com.radlance.firebasetodo.presentation.todo
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -17,7 +14,6 @@ import com.radlance.firebasetodo.R
 import com.radlance.firebasetodo.databinding.FragmentProfileBinding
 import com.radlance.firebasetodo.domain.entity.User
 import com.radlance.firebasetodo.presentation.auth.FireBaseUiState
-import com.radlance.firebasetodo.presentation.auth.MainViewModel
 import com.radlance.firebasetodo.presentation.auth.StartActivity
 import dagger.hilt.android.AndroidEntryPoint
 

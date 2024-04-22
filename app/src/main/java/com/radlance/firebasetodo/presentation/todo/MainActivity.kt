@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.radlance.firebasetodo.R
 import com.radlance.firebasetodo.databinding.ActivityMainBinding
-import com.radlance.firebasetodo.presentation.auth.MainViewModel
 import com.radlance.firebasetodo.presentation.auth.StartActivity
 import dagger.hilt.android.AndroidEntryPoint
 

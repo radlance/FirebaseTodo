@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.radlance.firebasetodo.domain.FireBaseResult
 import com.radlance.firebasetodo.domain.usecase.DeleteUserUseCase
-import com.radlance.firebasetodo.domain.usecase.UpdateUserInfoUseCase
 import com.radlance.firebasetodo.domain.usecase.LoadUserInfoUseCase
+import com.radlance.firebasetodo.domain.usecase.UpdateUserInfoUseCase
 import com.radlance.firebasetodo.presentation.auth.FireBaseUiState
 import com.radlance.firebasetodo.presentation.utils.validateFireBaseEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,9 +34,6 @@ class ProfileViewModel @Inject constructor(
     val errorInputName: LiveData<Boolean>
         get() = _errorInputName
 
-    private val _errorInputEmail = MutableLiveData<Boolean>()
-    val errorInputEmail: LiveData<Boolean>
-        get() = _errorInputEmail
 
     private fun validateInput(name: String, email: String): Boolean {
         val result = true
@@ -45,8 +42,7 @@ class ProfileViewModel @Inject constructor(
             return false
         }
 
-        if(email.isBlank() || !validateFireBaseEmail(email)) {
-            _errorInputEmail.value = true
+        if (email.isBlank() || !validateFireBaseEmail(email)) {
             return false
         }
         return result
@@ -76,13 +72,5 @@ class ProfileViewModel @Inject constructor(
 
     fun resetInputName() {
         _errorInputName.value = false
-    }
-
-    fun resetErrorInputEmail() {
-        _errorInputEmail.value = false
-    }
-
-    fun deleteUser() {
-        deleteUserUseCase()
     }
 }

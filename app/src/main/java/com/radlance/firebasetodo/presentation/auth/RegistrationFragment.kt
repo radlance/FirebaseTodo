@@ -1,6 +1,5 @@
 package com.radlance.firebasetodo.presentation.auth
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,7 +13,6 @@ import androidx.lifecycle.LiveData
 import com.google.android.material.textfield.TextInputLayout
 import com.radlance.firebasetodo.R
 import com.radlance.firebasetodo.databinding.FragmentRegistrationBinding
-import com.radlance.firebasetodo.presentation.todo.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

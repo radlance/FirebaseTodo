@@ -5,7 +5,7 @@ import com.radlance.firebasetodo.domain.repository.AppRepository
 import javax.inject.Inject
 
 class DeleteUserUseCase @Inject constructor(private val appRepository: AppRepository) {
-    operator fun invoke(): FireBaseResult {
-        return appRepository.deleteUser()
+    suspend operator fun invoke(password: String): FireBaseResult {
+        return appRepository.deleteUser(password)
     }
 }
