@@ -52,4 +52,7 @@
     <string name="confirm_your_email">Confirm your email address</string>
     <string name="confirmation_email">We will send confirmation link on your email</string>
     <string name="incorrect_password">Incorrect password</string>
+    <string name="todo">Todo</string>
+    <string name="check">check</string>
+    <string name="trash">trash</string>
 </resources>

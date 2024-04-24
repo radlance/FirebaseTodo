@@ -5,10 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.radlance.firebasetodo.databinding.FragmentTodosBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TodosFragment : Fragment() {
+    private val viewModel: TodosViewModel by viewModels()
     private var _binding: FragmentTodosBinding? = null
+    private lateinit var rvTodosList: RecyclerView
+    private lateinit var todosListAdapter: TodosListAdapter
     private val binding: FragmentTodosBinding
         get() = _binding ?: throw RuntimeException("TodosFragment == null")
 
@@ -21,6 +28,31 @@ class TodosFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupTodosList()
+        viewModel.todosList.observe(viewLifecycleOwner) { todoList ->
+            if (todoList.isEmpty()) {
+                viewModel.addTodo()
+            }
+            todosListAdapter.todosList = todoList.sortedBy { it.completed }
+        }
+    }
+
+    private fun setupTodosList() {
+        rvTodosList = binding.rvTodos
+        todosListAdapter = TodosListAdapter()
+        with(rvTodosList) {
+            adapter = todosListAdapter
+        }
+        setupClickListeners()
+    }
+
+    private fun setupClickListeners() {
+        todosListAdapter.onCompleteClickListener = {
+            viewModel.changeCompletedState(it)
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

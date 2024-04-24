@@ -41,7 +41,6 @@ class AuthRepositoryImpl @Inject constructor() : AuthRepository {
 //                    .setUrl("https://fir-todo-b41b5.web.app/")
 //                    .setHandleCodeInApp(true)
 //                    .build()
-//                    //TODO вынести константы, сделать viewModel
 //            ).addOnCompleteListener { task ->
 //                if (task.isSuccessful) {
 //                    FireBaseResult.Success(Unit)
