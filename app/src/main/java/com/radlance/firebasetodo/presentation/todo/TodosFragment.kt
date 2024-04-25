@@ -35,6 +35,7 @@ class TodosFragment : Fragment() {
             if (todoList.isEmpty()) {
                 viewModel.addTodo()
             }
+            binding.pbRv.visibility = View.INVISIBLE
             todosListAdapter.todosList = todoList.sortedBy { it.completed }
         }
     }
@@ -51,6 +52,7 @@ class TodosFragment : Fragment() {
     private fun setupClickListeners() {
         todosListAdapter.onCompleteClickListener = {
             viewModel.changeCompletedState(it)
+            viewModel.updateTodosStatistic(todosListAdapter.todosList)
         }
     }
     override fun onDestroyView() {

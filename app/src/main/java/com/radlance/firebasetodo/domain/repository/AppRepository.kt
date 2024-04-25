@@ -14,4 +14,5 @@ interface AppRepository {
     suspend fun editTodo(todo: Todo)
     suspend fun deleteTodo(todo: Todo)
     suspend fun getTodosList(): List<Todo>
+    suspend fun updateTodosStatistic(todosList: List<Todo>)
 }

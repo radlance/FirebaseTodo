@@ -1,8 +1,6 @@
 package com.radlance.firebasetodo.data.repository
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
@@ -96,8 +94,10 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
             .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
             .child(TODOS)
             .child(Firebase.auth.currentUser!!.uid)
+            .child(TODOS)
             .child(todo.title!!)
             .setValue(todo)
+
     }
 
     override suspend fun editTodo(todo: Todo) {
@@ -106,6 +106,7 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
             .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
             .child(TODOS)
             .child(Firebase.auth.currentUser!!.uid)
+            .child(TODOS)
             .child(todo.title!!)
             .setValue(todo)
     }
@@ -118,6 +119,7 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
             .child(Firebase.auth.currentUser!!.uid)
             .removeValue()
     }
+
     //TODO доделать получение списка
     override suspend fun getTodosList(): List<Todo> {
 //        val todosRef = FirebaseDatabase
@@ -125,10 +127,12 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
 //            .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
 //            .child(TODOS)
 
-                val todosSnapshot = FirebaseDatabase
+        val todosSnapshot = FirebaseDatabase
             .getInstance(AuthRepositoryImpl.DATABASE_REFERENCE)
             .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
-            .child(TODOS).child(Firebase.auth.currentUser!!.uid).get().await()
+            .child(TODOS)
+            .child(Firebase.auth.currentUser!!.uid)
+            .child(TODOS).get().await()
         val todosList = mutableListOf<Todo>()
 
 //        val valueEventListener = object : ValueEventListener {
@@ -152,7 +156,26 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
                 it.getValue(Todo::class.java)?.let { todo -> todosList.add(todo) }
             }
         }
+
         return todosList
+    }
+
+    override suspend fun updateTodosStatistic(todosList: List<Todo>) {
+        FirebaseDatabase.getInstance(AuthRepositoryImpl.DATABASE_REFERENCE)
+            .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
+            .child(TODOS)
+            .child(Firebase.auth.currentUser!!.uid)
+            .child(TODOS_STATS)
+            .child(COMPLETED)
+            .setValue(todosList.count { it.completed == true } + 1)
+
+        FirebaseDatabase.getInstance(AuthRepositoryImpl.DATABASE_REFERENCE)
+            .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
+            .child(TODOS)
+            .child(Firebase.auth.currentUser!!.uid)
+            .child(TODOS_STATS)
+            .child(IN_PROCESS)
+            .setValue(todosList.count { it.completed == false } - 1)
     }
 
     // ДОДЕЛАТЬ CRUD
@@ -163,6 +186,9 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
     }
 
     companion object {
+        private const val TODOS_STATS = "stats"
         private const val TODOS = "todos"
+        private const val COMPLETED = "completed"
+        private const val IN_PROCESS = "in_process"
     }
 }

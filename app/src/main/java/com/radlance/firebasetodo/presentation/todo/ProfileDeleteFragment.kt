@@ -18,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ProfileDeleteFragment : Fragment() {
     private var _binging: FragmentDeleteAccountBinding? = null
-    private val binging: FragmentDeleteAccountBinding
+    private val binding: FragmentDeleteAccountBinding
         get() = _binging ?: throw RuntimeException("ProfileDeleteFragment")
     private val mainViewModel: MainViewModel by viewModels()
 
@@ -28,24 +28,28 @@ class ProfileDeleteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binging = FragmentDeleteAccountBinding.inflate(inflater, container, false)
-        return binging.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setPasswordChangedListener()
         observeDeleteUserResult()
-        binging.buttonDelete.setOnClickListener {
-            mainViewModel.deleteUser(binging.etPassword.text.toString())
+        binding.ivBackButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+        binding.buttonDelete.setOnClickListener {
+            mainViewModel.deleteUser(binding.etPassword.text.toString())
         }
     }
 
     private fun setPasswordChangedListener() {
-        binging.etPassword.addTextChangedListener(object : TextWatcher {
+        binding.etPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binging.tilPassword.error = null
+                binding.tilPassword.error = null
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -65,7 +69,7 @@ class ProfileDeleteFragment : Fragment() {
                 }
 
                 is FireBaseUiState.Error -> {
-                    binging.tilPassword.error = getString(R.string.incorrect_password)
+                    binding.tilPassword.error = getString(R.string.incorrect_password)
                 }
             }
         }

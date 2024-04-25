@@ -28,6 +28,9 @@ class ConfirmEmailFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.ivBackButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
         super.onViewCreated(view, savedInstanceState)
         viewModel.sendConfirmEmail()
         binding.buttonLogin.setOnClickListener {

@@ -103,6 +103,6 @@ class RegistrationViewModel @Inject constructor(
     }
 
     fun resetErrorInputConfirmPassword() {
-        _errorInputPassword.value = false
+        _errorInputConfirmPassword.value = false
     }
 }
