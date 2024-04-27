@@ -24,6 +24,9 @@ class MainViewModel @Inject constructor(
     val isUserAuthenticated: LiveData<Boolean>
         get() = _isUserAuthenticated
 
+    init {
+        isUserAuthenticated()
+    }
     fun isUserAuthenticated() {
         _isUserAuthenticated.value = isUserAuthenticatedUseCase()
     }

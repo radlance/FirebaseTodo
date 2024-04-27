@@ -101,6 +101,7 @@
                 android:padding="15dp">
 
                 <TextView
+                    android:id="@+id/tv_completed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/num_example"
@@ -137,6 +138,7 @@
                 android:padding="15dp">
 
                 <TextView
+                    android:id="@+id/tv_in_process"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/num_example"

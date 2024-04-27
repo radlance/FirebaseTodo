@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.radlance.firebasetodo.domain.FireBaseResult
+import com.radlance.firebasetodo.domain.entity.Tasks
 import com.radlance.firebasetodo.domain.entity.Todo
 import com.radlance.firebasetodo.domain.entity.User
 import com.radlance.firebasetodo.domain.repository.AppRepository
@@ -14,7 +15,7 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class AppRepositoryImpl @Inject constructor() : AppRepository {
-    override suspend fun loadUserInfoUseCase(): FireBaseResult {
+    override suspend fun loadUserInfo(): FireBaseResult {
         return try {
             val userSnapshot = FirebaseDatabase.getInstance(AuthRepositoryImpl.DATABASE_REFERENCE)
                 .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
@@ -32,7 +33,7 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
         }
     }
 
-    override suspend fun loadUserInfo(name: String, email: String, imageUrl: Uri): FireBaseResult {
+    override suspend fun uploadUserInfo(name: String, email: String, imageUrl: Uri): FireBaseResult {
         return try {
             val database =
                 FirebaseDatabase.getInstance(AuthRepositoryImpl.DATABASE_REFERENCE).getReference(
@@ -88,68 +89,34 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
         }
     }
 
-    override suspend fun addTodo(todo: Todo) {
-        FirebaseDatabase
-            .getInstance(AuthRepositoryImpl.DATABASE_REFERENCE)
+    private fun getUserReference(node: String) =
+        FirebaseDatabase.getInstance(AuthRepositoryImpl.DATABASE_REFERENCE)
             .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
             .child(TODOS)
             .child(Firebase.auth.currentUser!!.uid)
-            .child(TODOS)
+            .child(node)
+
+    override suspend fun addTodo(todo: Todo) {
+        getUserReference(TODOS)
             .child(todo.title!!)
             .setValue(todo)
-
     }
 
     override suspend fun editTodo(todo: Todo) {
-        FirebaseDatabase
-            .getInstance(AuthRepositoryImpl.DATABASE_REFERENCE)
-            .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
-            .child(TODOS)
-            .child(Firebase.auth.currentUser!!.uid)
-            .child(TODOS)
+        getUserReference(TODOS)
             .child(todo.title!!)
             .setValue(todo)
     }
 
     override suspend fun deleteTodo(todo: Todo) {
-        FirebaseDatabase
-            .getInstance(AuthRepositoryImpl.DATABASE_REFERENCE)
-            .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
-            .child(TODOS)
-            .child(Firebase.auth.currentUser!!.uid)
+        getUserReference(TODOS)
+            .child(todo.title!!)
             .removeValue()
     }
 
-    //TODO доделать получение списка
     override suspend fun getTodosList(): List<Todo> {
-//        val todosRef = FirebaseDatabase
-//            .getInstance(AuthRepositoryImpl.DATABASE_REFERENCE)
-//            .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
-//            .child(TODOS)
-
-        val todosSnapshot = FirebaseDatabase
-            .getInstance(AuthRepositoryImpl.DATABASE_REFERENCE)
-            .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
-            .child(TODOS)
-            .child(Firebase.auth.currentUser!!.uid)
-            .child(TODOS).get().await()
+        val todosSnapshot = getUserReference(TODOS).get().await()
         val todosList = mutableListOf<Todo>()
-
-//        val valueEventListener = object : ValueEventListener {
-//
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                for (todoSnapshot in snapshot.children) {
-//                    val todo = todoSnapshot.getValue(Todo::class.java)
-//                    todo?.let { todosList.add(it) }
-//                }
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                throw RuntimeException(error.message)
-//            }
-//        }
-//
-//        todosRef.addValueEventListener(valueEventListener)
 
         if (todosSnapshot.exists()) {
             todosSnapshot.children.forEach {
@@ -161,25 +128,35 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
     }
 
     override suspend fun updateTodosStatistic(todosList: List<Todo>) {
-        FirebaseDatabase.getInstance(AuthRepositoryImpl.DATABASE_REFERENCE)
-            .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
-            .child(TODOS)
-            .child(Firebase.auth.currentUser!!.uid)
-            .child(TODOS_STATS)
+        getUserReference(TODOS_STATS)
             .child(COMPLETED)
-            .setValue(todosList.count { it.completed == true } + 1)
+            .setValue(todosList.count { it.isCompleted == true })
 
-        FirebaseDatabase.getInstance(AuthRepositoryImpl.DATABASE_REFERENCE)
-            .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
-            .child(TODOS)
-            .child(Firebase.auth.currentUser!!.uid)
-            .child(TODOS_STATS)
+        getUserReference(TODOS_STATS)
             .child(IN_PROCESS)
-            .setValue(todosList.count { it.completed == false } - 1)
+            .setValue(todosList.count { it.isCompleted == false })
     }
 
-    // ДОДЕЛАТЬ CRUD
 
+    override suspend fun loadTasksInfo(): FireBaseResult {
+        return try {
+            val taskSnapshot = FirebaseDatabase.getInstance(AuthRepositoryImpl.DATABASE_REFERENCE)
+                .getReference(AuthRepositoryImpl.MANAGEMENT_KEY)
+                .child(TODOS)
+                .child(Firebase.auth.currentUser!!.uid)
+                .child(TODOS_STATS)
+                .get().await()
+
+            if (taskSnapshot.exists()) {
+                val tasks = taskSnapshot.getValue(Tasks::class.java)
+                FireBaseResult.Success(tasks!!)
+            } else {
+                FireBaseResult.Error("Tasks stats not found")
+            }
+        } catch (e: Exception) {
+            FireBaseResult.Error(e.message.toString())
+        }
+    }
 
     private fun getStorageUrl(uId: String): String {
         return AuthRepositoryImpl.IMAGES_PATH + uId
@@ -189,6 +166,6 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
         private const val TODOS_STATS = "stats"
         private const val TODOS = "todos"
         private const val COMPLETED = "completed"
-        private const val IN_PROCESS = "in_process"
+        private const val IN_PROCESS = "inProcess"
     }
 }

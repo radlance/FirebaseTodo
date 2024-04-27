@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class TodosFragment : Fragment() {
     private val viewModel: TodosViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
     private var _binding: FragmentTodosBinding? = null
     private lateinit var rvTodosList: RecyclerView
     private lateinit var todosListAdapter: TodosListAdapter
@@ -36,17 +37,24 @@ class TodosFragment : Fragment() {
                 viewModel.addTodo()
             }
             binding.pbRv.visibility = View.INVISIBLE
-            todosListAdapter.todosList = todoList.sortedBy { it.completed }
+            viewModel.updateTodosStatistic(todoList)
+            todosListAdapter.todosList = todoList
         }
+        // TODO сделать установку значений в профиль
     }
 
     private fun setupTodosList() {
-        rvTodosList = binding.rvTodos
-        todosListAdapter = TodosListAdapter()
-        with(rvTodosList) {
-            adapter = todosListAdapter
+        mainViewModel.isUserAuthenticated.observe(viewLifecycleOwner) {
+            if (it) {
+                viewModel.getTodosList()
+                rvTodosList = binding.rvTodos
+                todosListAdapter = TodosListAdapter()
+                with(rvTodosList) {
+                    adapter = todosListAdapter
+                }
+                setupClickListeners()
+            }
         }
-        setupClickListeners()
     }
 
     private fun setupClickListeners() {

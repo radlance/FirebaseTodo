@@ -35,7 +35,7 @@
     <string name="profile">profile</string>
     <string name="edit_profile">Edit profile</string>
     <string name="your_tasks">Your tasks</string>
-    <string name="num_example">100</string>
+    <string name="num_example">0</string>
     <string name="task_completed">task completed</string>
     <string name="task_in_process">task in process</string>
     <string name="name">Name</string>

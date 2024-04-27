@@ -12,6 +12,8 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.radlance.firebasetodo.R
 import com.radlance.firebasetodo.databinding.FragmentProfileBinding
+import com.radlance.firebasetodo.domain.FireBaseResult
+import com.radlance.firebasetodo.domain.entity.Tasks
 import com.radlance.firebasetodo.domain.entity.User
 import com.radlance.firebasetodo.presentation.auth.FireBaseUiState
 import com.radlance.firebasetodo.presentation.auth.StartActivity
@@ -43,6 +45,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadTaskInfo()
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             requireActivity().finish()
         }
@@ -62,6 +65,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun observeLoadResult() {
+        profileViewModel.loadTasksInfo()
         profileViewModel.loadUserInfo()
         profileViewModel.isSuccessfulLoad.observe(viewLifecycleOwner) {
             binding.pbImage.visibility = View.VISIBLE
@@ -96,6 +100,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupSavedInfo() {
+        profileViewModel.loadTasksInfo()
         user?.let { user ->
             binding.tvName.text = user.name
             binding.tvEmail.text = user.email
@@ -125,6 +130,17 @@ class ProfileFragment : Fragment() {
                 val intent = Intent(requireActivity().applicationContext, StartActivity::class.java)
                 startActivity(intent)
                 requireActivity().finish()
+            }
+        }
+    }
+
+    private fun loadTaskInfo() {
+        profileViewModel.isSuccessfulLoadTasksInfo.observe(viewLifecycleOwner) {
+            when (it) {
+                is FireBaseUiState.Success<*> -> {
+                    binding.tvCompleted.text = (it.value as Tasks).completed.toString()
+                    binding.tvInProcess.text = it.value.inProcess.toString()
+                }
             }
         }
     }

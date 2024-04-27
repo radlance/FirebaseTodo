@@ -31,7 +31,7 @@ class TodosListAdapter : RecyclerView.Adapter<TodosListAdapter.TodosListViewHold
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (todosList[position].completed == true) {
+        return if (todosList[position].isCompleted == true) {
             VIEW_TYPE_COMPLETED
         } else {
             VIEW_TYPE_ACTIVE

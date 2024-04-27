@@ -26,11 +26,7 @@ class TodosViewModel @Inject constructor(
     val todosList: LiveData<List<Todo>>
         get() = _todosList
 
-    init {
-        getTodosList()
-    }
-
-    private fun getTodosList() {
+    fun getTodosList() {
         viewModelScope.launch {
             _todosList.value = getTodosListUseCase()!!
         }
@@ -55,7 +51,7 @@ class TodosViewModel @Inject constructor(
 
     fun changeCompletedState(todo: Todo) {
         viewModelScope.launch {
-            val completedTodo = todo.copy(completed = true)
+            val completedTodo = todo.copy(isCompleted = true)
             editTodoUseCase(completedTodo)
             _todosList.value = getTodosListUseCase()!!
         }

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.radlance.firebasetodo.domain.FireBaseResult
-import com.radlance.firebasetodo.domain.usecase.DeleteUserUseCase
+import com.radlance.firebasetodo.domain.usecase.LoadTasksInfoUseCase
 import com.radlance.firebasetodo.domain.usecase.LoadUserInfoUseCase
 import com.radlance.firebasetodo.domain.usecase.UpdateUserInfoUseCase
 import com.radlance.firebasetodo.presentation.auth.FireBaseUiState
@@ -19,12 +19,16 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val loadUserInfoUseCase: LoadUserInfoUseCase,
     private val updateUserInfoUseCase: UpdateUserInfoUseCase,
-    private val deleteUserUseCase: DeleteUserUseCase,
-    private val mapper: FireBaseResult.Mapper<FireBaseUiState>
+    private val loadTasksInfoUseCase: LoadTasksInfoUseCase,
+    private val mapper: FireBaseResult.Mapper<FireBaseUiState>,
 ) : ViewModel() {
     private val _isSuccessfulLoadUserInfo = MutableLiveData<FireBaseUiState>()
     val isSuccessfulLoad: LiveData<FireBaseUiState>
         get() = _isSuccessfulLoadUserInfo
+
+    private val _isSuccessfulLoadTasksInfo = MutableLiveData<FireBaseUiState>()
+    val isSuccessfulLoadTasksInfo: LiveData<FireBaseUiState>
+        get() = _isSuccessfulLoadTasksInfo
 
     private val _isSuccessfulLoadUserImage = MutableLiveData<FireBaseUiState>()
     val isSuccessfulLoadUserImage: LiveData<FireBaseUiState>
@@ -56,6 +60,13 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun loadTasksInfo() {
+        viewModelScope.launch {
+            val loadResult = loadTasksInfoUseCase()
+            val uiState = loadResult.map(mapper)
+            _isSuccessfulLoadTasksInfo.value = uiState
+        }
+    }
     fun uploadImageUri(name: String, email: String, imageUri: Uri = Uri.EMPTY) {
         val formattedName = parseString(name)
         val formattedEmail = parseString(email)
