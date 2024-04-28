@@ -5,20 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.radlance.firebasetodo.domain.entity.Todo
-import com.radlance.firebasetodo.domain.usecase.AddTodoUseCase
 import com.radlance.firebasetodo.domain.usecase.DeleteTodoUseCase
 import com.radlance.firebasetodo.domain.usecase.EditTodoUseCase
 import com.radlance.firebasetodo.domain.usecase.GetTodosListUseCase
 import com.radlance.firebasetodo.domain.usecase.UpdateTodosStatisticUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TodosViewModel @Inject constructor(
     private val getTodosListUseCase: GetTodosListUseCase,
-    private val addTodoUseCase: AddTodoUseCase,
     private val editTodoUseCase: EditTodoUseCase,
     private val deleteTodoUseCase: DeleteTodoUseCase,
     private val updateTodosStatisticUseCase: UpdateTodosStatisticUseCase
@@ -40,16 +37,6 @@ class TodosViewModel @Inject constructor(
         }
     }
 
-    fun addTodo() {
-        viewModelScope.launch {
-            for (i in 1..10) {
-                async {
-                    addTodoUseCase(Todo(i, "title $i", false))
-                }.await()
-            }
-            _todosList.value = getTodosListUseCase()!!
-        }
-    }
 
     fun deleteTodo(todo: Todo) {
         viewModelScope.launch {

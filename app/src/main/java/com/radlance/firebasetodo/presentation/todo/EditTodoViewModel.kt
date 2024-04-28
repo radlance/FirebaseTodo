@@ -21,11 +21,16 @@ class EditTodoViewModel @Inject constructor(
     val errorInputTodo: LiveData<Boolean>
         get() = _errorInputTodo
 
+    private val _shouldCloseScreen = MutableLiveData<Boolean>()
+    val shouldCloseScreen: LiveData<Boolean>
+        get() = _shouldCloseScreen
+
     fun editTodo(todo: Todo) {
         val formattedTodo = todo.copy(title = parseString(todo.title))
         if (validateTodo(formattedTodo)) {
             viewModelScope.launch {
                 editTodoUseCase(formattedTodo)
+                _shouldCloseScreen.value = true
             }
         }
     }
@@ -36,6 +41,7 @@ class EditTodoViewModel @Inject constructor(
             if (validateTodo(formattedTodo)) {
                 viewModelScope.launch {
                     addTodoUseCase(formattedTodo)
+                    _shouldCloseScreen.value = true
                 }
             }
         }

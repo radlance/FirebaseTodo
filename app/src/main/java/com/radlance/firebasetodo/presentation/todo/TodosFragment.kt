@@ -35,12 +35,14 @@ class TodosFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupTodosList()
         viewModel.todosList.observe(viewLifecycleOwner) { todoList ->
-            if (todoList.isEmpty()) {
-                viewModel.addTodo()
-            }
             binding.pbRv.visibility = View.INVISIBLE
             viewModel.updateTodosStatistic(todoList)
             todosListAdapter.todosList = todoList
+            binding.tvListStatus.visibility = if (todoList.isEmpty()) {
+                View.VISIBLE
+            } else {
+                View.INVISIBLE
+            }
             binding.fabAdd.setOnClickListener {
                 launchNewTodoFragment(todoList.size + 1)
             }

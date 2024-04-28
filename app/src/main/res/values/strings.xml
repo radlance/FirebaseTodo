@@ -58,4 +58,5 @@
     <string name="title">Title</string>
     <string name="error_todo">The field must not be empty</string>
     <string name="add_todo">add_todo</string>
+    <string name="todo_list_is_empty">todo list is empty</string>
 </resources>

@@ -35,19 +35,6 @@ class AuthRepositoryImpl @Inject constructor() : AuthRepository {
 
     override suspend fun sendConfirmEmail(): FireBaseResult {
         return try {
-//            Firebase.auth.sendSignInLinkToEmail(
-//                email!!,
-//                ActionCodeSettings.newBuilder()
-//                    .setUrl("https://fir-todo-b41b5.web.app/")
-//                    .setHandleCodeInApp(true)
-//                    .build()
-//            ).addOnCompleteListener { task ->
-//                if (task.isSuccessful) {
-//                    FireBaseResult.Success(Unit)
-//                } else {
-//                    FireBaseResult.Error(task.exception.toString())
-//                }
-//            }
             Firebase.auth.currentUser?.sendEmailVerification()?.await()
             FireBaseResult.Success(Unit)
         } catch (e: Exception) {

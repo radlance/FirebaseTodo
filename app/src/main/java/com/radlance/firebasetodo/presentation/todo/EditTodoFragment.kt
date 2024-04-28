@@ -45,17 +45,24 @@ class EditTodoFragment : Fragment() {
         }
         handleInputError()
         setupChangeListener()
+        observeCloseScreen()
         if (screenMode != KEY_ADD_TODO) {
             todo?.let { todo ->
                 binding.etTitle.setText(todo.title)
                 binding.buttonSave.setOnClickListener {
                     viewModel.editTodo(todo.copy(title = binding.etTitle.text.toString()))
-                    requireActivity().supportFragmentManager.popBackStack()
                 }
             }
         } else {
             binding.buttonSave.setOnClickListener {
                 viewModel.addTodo(todosListSize, binding.etTitle.text.toString())
+            }
+        }
+    }
+
+    private fun observeCloseScreen() {
+        viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
+            if (it) {
                 requireActivity().supportFragmentManager.popBackStack()
             }
         }
