@@ -12,7 +12,6 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.radlance.firebasetodo.R
 import com.radlance.firebasetodo.databinding.FragmentProfileBinding
-import com.radlance.firebasetodo.domain.FireBaseResult
 import com.radlance.firebasetodo.domain.entity.Tasks
 import com.radlance.firebasetodo.domain.entity.User
 import com.radlance.firebasetodo.presentation.auth.FireBaseUiState
