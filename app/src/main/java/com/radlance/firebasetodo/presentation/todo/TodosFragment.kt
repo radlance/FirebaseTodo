@@ -41,6 +41,9 @@ class TodosFragment : Fragment() {
             binding.pbRv.visibility = View.INVISIBLE
             viewModel.updateTodosStatistic(todoList)
             todosListAdapter.todosList = todoList
+            binding.fabAdd.setOnClickListener {
+                launchNewTodoFragment(todoList.size + 1)
+            }
         }
     }
 
@@ -57,12 +60,20 @@ class TodosFragment : Fragment() {
             }
         }
     }
+    private fun launchNewTodoFragment(todosListSize: Int) {
+        requireActivity()
+            .supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.container_app, EditTodoFragment.newAddInstance(todosListSize))
+            .addToBackStack(null)
+            .commit()
+    }
 
     private fun launchEditTodoFragment(todo: Todo) {
         requireActivity()
             .supportFragmentManager
             .beginTransaction()
-            .replace(R.id.container_app, EditTodoFragment.newInstance(todo))
+            .replace(R.id.container_app, EditTodoFragment.newEditInstance(todo))
             .addToBackStack(null)
             .commit()
     }

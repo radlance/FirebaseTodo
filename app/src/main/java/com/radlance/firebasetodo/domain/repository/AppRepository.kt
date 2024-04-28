@@ -8,7 +8,6 @@ interface AppRepository {
     suspend fun loadUserInfo(): FireBaseResult
     suspend fun uploadUserInfo(name: String, email: String, imageUrl: Uri): FireBaseResult
     suspend fun deleteUser(password: String): FireBaseResult
-
     suspend fun addTodo(todo: Todo)
     suspend fun editTodo(todo: Todo)
     suspend fun deleteTodo(todo: Todo)

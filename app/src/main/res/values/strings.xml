@@ -57,4 +57,5 @@
     <string name="trash">trash</string>
     <string name="title">Title</string>
     <string name="error_todo">The field must not be empty</string>
+    <string name="add_todo">add_todo</string>
 </resources>
