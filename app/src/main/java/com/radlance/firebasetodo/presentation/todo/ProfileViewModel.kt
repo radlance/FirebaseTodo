@@ -35,6 +35,10 @@ class ProfileViewModel @Inject constructor(
         get() = _isSuccessfulLoadUserImage
     private val _errorInputName = MutableLiveData<Boolean>()
 
+    private val _isReadyToSave = MutableLiveData<Boolean>()
+    val isReadyToSave: LiveData<Boolean>
+        get() = _isReadyToSave
+
     val errorInputName: LiveData<Boolean>
         get() = _errorInputName
 
@@ -71,6 +75,7 @@ class ProfileViewModel @Inject constructor(
         val formattedName = parseString(name)
         val formattedEmail = parseString(email)
         if (validateInput(formattedName, formattedEmail)) {
+            _isReadyToSave.value = true
             viewModelScope.launch {
                 val loadResult = updateUserInfoUseCase(formattedName, formattedEmail, imageUri)
                 val uiState = loadResult.map(mapper)

@@ -90,7 +90,7 @@ class RegistrationViewModel @Inject constructor(
 
     private fun parseString(string: String?): String = string?.trim() ?: ""
 
-    fun resetInputName() {
+    fun resetErrorInputName() {
         _errorInputName.value = false
     }
 

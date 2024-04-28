@@ -35,8 +35,7 @@
             android:layout_height="25dp"
             android:layout_marginEnd="10dp"
             android:contentDescription="@string/check"
-            android:src="@drawable/ic_check"
-            android:visibility="gone"
+            android:src="@drawable/ic_check_completed"
             app:layout_constraintBottom_toBottomOf="@id/tv_todo"
             app:layout_constraintEnd_toStartOf="@id/iv_trash"
             app:layout_constraintTop_toTopOf="@id/tv_todo" />
@@ -46,8 +45,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:contentDescription="@string/trash"
-            android:src="@drawable/ic_trash"
-            android:visibility="gone"
+            android:src="@drawable/ic_trash_completed"
             app:layout_constraintBottom_toBottomOf="@id/tv_todo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_todo" />

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.radlance.firebasetodo.domain.entity.Todo
 import com.radlance.firebasetodo.domain.usecase.AddTodoUseCase
+import com.radlance.firebasetodo.domain.usecase.DeleteTodoUseCase
 import com.radlance.firebasetodo.domain.usecase.EditTodoUseCase
 import com.radlance.firebasetodo.domain.usecase.GetTodosListUseCase
 import com.radlance.firebasetodo.domain.usecase.UpdateTodosStatisticUseCase
@@ -19,6 +20,7 @@ class TodosViewModel @Inject constructor(
     private val getTodosListUseCase: GetTodosListUseCase,
     private val addTodoUseCase: AddTodoUseCase,
     private val editTodoUseCase: EditTodoUseCase,
+    private val deleteTodoUseCase: DeleteTodoUseCase,
     private val updateTodosStatisticUseCase: UpdateTodosStatisticUseCase
 ) :
     ViewModel() {
@@ -49,9 +51,20 @@ class TodosViewModel @Inject constructor(
         }
     }
 
+    fun deleteTodo(todo: Todo) {
+        viewModelScope.launch {
+            deleteTodoUseCase(todo)
+            _todosList.value = getTodosListUseCase()!!
+        }
+    }
+
     fun changeCompletedState(todo: Todo) {
         viewModelScope.launch {
-            val completedTodo = todo.copy(isCompleted = true)
+            val completedTodo = if (todo.isCompleted == false) {
+                todo.copy(isCompleted = true)
+            } else {
+                todo.copy(isCompleted = false)
+            }
             editTodoUseCase(completedTodo)
             _todosList.value = getTodosListUseCase()!!
         }

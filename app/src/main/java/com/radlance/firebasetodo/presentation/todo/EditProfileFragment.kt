@@ -52,6 +52,7 @@ class EditProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         handleInputErrors()
         setupChangedListeners()
+        observeLoadState()
         binding.ivBackButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
@@ -63,7 +64,6 @@ class EditProfileFragment : Fragment() {
 
         binding.buttonSave.setOnClickListener {
             saveNewUserInfo()
-            binding.buttonSave.text = getString(R.string.saving)
         }
 
         binding.tvDeleteAccount.setOnClickListener {
@@ -71,6 +71,11 @@ class EditProfileFragment : Fragment() {
         }
     }
 
+    private fun observeLoadState() {
+        profileViewModel.isReadyToSave.observe(viewLifecycleOwner) {
+            binding.buttonSave.text = getString(R.string.saving)
+        }
+    }
     private fun setupChangedListeners() {
         setTextChangedListener(binding.etName, profileViewModel::resetInputName)
 //        setTextChangedListener(binding.etEmail, profileViewModel::resetErrorInputEmail)

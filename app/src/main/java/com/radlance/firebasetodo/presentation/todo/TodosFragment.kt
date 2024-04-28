@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import com.radlance.firebasetodo.R
 import com.radlance.firebasetodo.databinding.FragmentTodosBinding
+import com.radlance.firebasetodo.domain.entity.Todo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,7 +42,6 @@ class TodosFragment : Fragment() {
             viewModel.updateTodosStatistic(todoList)
             todosListAdapter.todosList = todoList
         }
-        // TODO сделать установку значений в профиль
     }
 
     private fun setupTodosList() {
@@ -57,12 +58,31 @@ class TodosFragment : Fragment() {
         }
     }
 
+    private fun launchEditTodoFragment(todo: Todo) {
+        requireActivity()
+            .supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.container_app, EditTodoFragment.newInstance(todo))
+            .addToBackStack(null)
+            .commit()
+    }
+
     private fun setupClickListeners() {
         todosListAdapter.onCompleteClickListener = {
             viewModel.changeCompletedState(it)
             viewModel.updateTodosStatistic(todosListAdapter.todosList)
         }
+
+        todosListAdapter.onDeleteClickListener = {
+            viewModel.deleteTodo(it)
+            viewModel.updateTodosStatistic(todosListAdapter.todosList)
+        }
+
+        todosListAdapter.onTodoClickListener = {
+            launchEditTodoFragment(it)
+        }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

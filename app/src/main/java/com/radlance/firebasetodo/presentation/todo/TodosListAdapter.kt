@@ -1,10 +1,8 @@
 package com.radlance.firebasetodo.presentation.todo
 
-import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.radlance.firebasetodo.R
@@ -21,7 +19,7 @@ class TodosListAdapter : RecyclerView.Adapter<TodosListAdapter.TodosListViewHold
         }
 
     var onCompleteClickListener: ((Todo) -> Unit)? = null
-    var onRemoveClickListener: ((Todo) -> Unit)? = null
+    var onDeleteClickListener: ((Todo) -> Unit)? = null
     var onTodoClickListener: ((Todo) -> Unit)? = null
     class TodosListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = ItemTodoActiveBinding.bind(itemView)
@@ -57,16 +55,21 @@ class TodosListAdapter : RecyclerView.Adapter<TodosListAdapter.TodosListViewHold
 
     override fun onBindViewHolder(holder: TodosListViewHolder, position: Int) {
         val todo = todosList[position]
-        holder.binding.ivCheck.setOnClickListener {
-            onCompleteClickListener?.invoke(todo)
+        with(holder) {
+            binding.ivCheck.setOnClickListener {
+                onCompleteClickListener?.invoke(todo)
+            }
+
+            binding.ivTrash.setOnClickListener {
+                onDeleteClickListener?.invoke(todo)
+            }
+
+            holder.itemView.setOnClickListener {
+                onTodoClickListener?.invoke(todo)
+            }
+
+            bind(todo)
         }
-//        holder.itemView.setOnClickListener {
-//            onRemoveClickListener?.invoke(todo)
-//        }
-//        holder.itemView.setOnClickListener {
-//            onTodoClickListener?.invoke(todo)
-//        }
-        holder.bind(todo)
     }
 
     companion object {

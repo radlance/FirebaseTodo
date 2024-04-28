@@ -57,7 +57,7 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun setupChangedListeners() {
-        setTextChangedListener(binding.etName, viewModel::resetInputName)
+        setTextChangedListener(binding.etName, viewModel::resetErrorInputName)
         setTextChangedListener(binding.etEmail, viewModel::resetErrorInputEmail)
         setTextChangedListener(binding.etPassword, viewModel::resetErrorInputPassword)
         setTextChangedListener(binding.etConfirmPassword, viewModel::resetErrorInputConfirmPassword)

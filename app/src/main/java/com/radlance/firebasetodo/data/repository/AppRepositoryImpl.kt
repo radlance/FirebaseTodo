@@ -98,19 +98,19 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
 
     override suspend fun addTodo(todo: Todo) {
         getUserReference(TODOS)
-            .child(todo.title!!)
+            .child(todo.id.toString())
             .setValue(todo)
     }
 
     override suspend fun editTodo(todo: Todo) {
         getUserReference(TODOS)
-            .child(todo.title!!)
+            .child(todo.id.toString())
             .setValue(todo)
     }
 
     override suspend fun deleteTodo(todo: Todo) {
         getUserReference(TODOS)
-            .child(todo.title!!)
+            .child(todo.id.toString())
             .removeValue()
     }
 
