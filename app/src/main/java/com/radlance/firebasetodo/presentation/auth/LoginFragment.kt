@@ -81,6 +81,7 @@ class LoginFragment : Fragment() {
             .supportFragmentManager
             .beginTransaction()
             .replace(R.id.container_auth, ForgetPasswordFragment.newInstance())
+            .addToBackStack(null)
             .commit()
     }
 
