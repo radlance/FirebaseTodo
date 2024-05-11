@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.radlance.firebasetodo.R
@@ -28,8 +29,8 @@ class ConfirmEmailFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.ivBackButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            requireActivity().finish()
         }
         super.onViewCreated(view, savedInstanceState)
         viewModel.sendConfirmEmail()
