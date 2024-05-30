@@ -10,6 +10,7 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import com.radlance.firebasetodo.R
 import com.radlance.firebasetodo.databinding.FragmentRegistrationBinding
@@ -36,11 +37,11 @@ class RegistrationFragment : Fragment() {
         binding.ivBackButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
-        registerUser()
-        observeRegistrationResult()
         binding.tvSingIn.setOnClickListener {
             launchLoginFragment()
         }
+        registerUser()
+        observeRegistrationResult()
         handleInputErrors()
         setupChangedListeners()
     }
@@ -109,9 +110,6 @@ class RegistrationFragment : Fragment() {
         viewModel.isSuccessfulRegistration.observe(viewLifecycleOwner) {
             when (it) {
                 is FireBaseUiState.Success<*> -> {
-//                    val intent =
-//                        Intent(requireActivity().applicationContext, MainActivity::class.java)
-//                    startActivity(intent)
                     launchConfirmEmailFragment()
                 }
 
@@ -120,29 +118,16 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    private fun launchLoginFragment() {
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.container_auth, LoginFragment.newInstance())
-            .commit()
+    private fun launchConfirmEmailFragment() {
+        findNavController().navigate(R.id.action_registrationFragment_to_confirmEmailFragment)
     }
 
-    private fun launchConfirmEmailFragment() {
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.container_auth, ConfirmEmailFragment.newInstance())
-            .addToBackStack(null)
-            .commit()
+    private fun launchLoginFragment() {
+        findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        fun newInstance(): RegistrationFragment {
-            return RegistrationFragment()
-        }
     }
 }

@@ -113,15 +113,6 @@ class ProfileFragment : Fragment() {
             binding.pbImage.visibility = View.INVISIBLE
         }
     }
-//    private fun observeCurrentIcon() {
-//        profileViewModel.isSuccessfulLoadUserImage.observe(viewLifecycleOwner) {
-//            when (it) {
-//                is FireBaseUiState.Success<*> -> {
-//                    Glide.with(this).load(it.value).into(binding.ivProfileIcon)
-//                }
-//            }
-//        }
-//    }
 
     private fun observeCurrentUser() {
         mainViewModel.isUserAuthenticated.observe(viewLifecycleOwner) {

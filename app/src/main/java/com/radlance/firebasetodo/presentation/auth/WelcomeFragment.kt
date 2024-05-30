@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.radlance.firebasetodo.R
 import com.radlance.firebasetodo.databinding.FragmentWelcomeBinding
 
@@ -39,9 +40,6 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun launchLoginFragment() {
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.container_auth, LoginFragment.newInstance())
-            .commit()
+        findNavController().navigate(R.id.action_welcomeFragment_to_loginFragment)
     }
 }

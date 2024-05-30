@@ -96,10 +96,4 @@ class ForgetPasswordFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
-
-    companion object {
-        fun newInstance(): ForgetPasswordFragment {
-            return ForgetPasswordFragment()
-        }
-    }
 }

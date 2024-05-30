@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.radlance.firebasetodo.R
 import com.radlance.firebasetodo.databinding.FragmentVerifyEmailBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,20 +41,11 @@ class ConfirmEmailFragment : Fragment() {
     }
 
     private fun launchLoginFragment() {
-        requireActivity().supportFragmentManager.apply {
-            beginTransaction()
-            .replace(R.id.container_auth, LoginFragment.newInstance())
-            .commit()
-        }
+        findNavController().navigate(R.id.action_confirmEmailFragment_to_loginFragment)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        fun newInstance(): ConfirmEmailFragment {
-            return ConfirmEmailFragment()
-        }
     }
 }

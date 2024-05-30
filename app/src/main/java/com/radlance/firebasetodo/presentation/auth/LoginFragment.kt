@@ -11,6 +11,7 @@ import android.widget.EditText
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.radlance.firebasetodo.R
 import com.radlance.firebasetodo.databinding.FragmentLoginBinding
 import com.radlance.firebasetodo.presentation.todo.MainActivity
@@ -69,20 +70,11 @@ class LoginFragment : Fragment() {
     }
 
     private fun launchRegistrationFragment() {
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.container_auth, RegistrationFragment.newInstance())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.action_loginFragment_to_registrationFragment)
     }
 
     private fun launchForgetPasswordFragment() {
-        requireActivity()
-            .supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.container_auth, ForgetPasswordFragment.newInstance())
-            .addToBackStack(null)
-            .commit()
+        findNavController().navigate(R.id.action_loginFragment_to_forgetPasswordFragment)
     }
 
     private fun authenticateUser() {
@@ -130,11 +122,5 @@ class LoginFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        fun newInstance(): LoginFragment {
-            return LoginFragment()
-        }
     }
 }
