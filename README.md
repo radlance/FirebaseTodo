@@ -49,7 +49,7 @@ Android-приложение для управления вашими задач
 + **Firebase realtime database** — облачная база данных NoSQL, позволяющая хранить и синхронизировать данные в реальном времени.
 
 
-+ **Firebase Authentication** — безопасная служба аутентификации и проверки подлинности, предоставляемая платформой Firebase
++ **Firebase Authentication** — безопасная служба аутентификации и проверки подлинности, предоставляемая платформой Firebase.
 
 
 + **Firebase Storage** — облачное хранилище файлов которое позволяет сохранять и загружать файлы в своих приложениях.
@@ -63,11 +63,11 @@ Android-приложение для управления вашими задач
 
 ## Экраны
 
-![welcome_screen](../screenshots/welcome_screen.jpg)
-![login_screen](../screenshots/login_screen.jpg)
-![forget_password_screen](../screenshots/forget_password_screen.jpg)
-![registration_screen](../screenshots/registration_screen.jpg)
-![todo_screen](../screenshots/todo_screen.jpg)
+![welcome_screen](screenshots/welcome_screen.jpg)
+![login_screen](screenshots/login_screen.jpg)
+![forget_password_screen](screenshots/forget_password_screen.jpg)
+![registration_screen](screenshots/registration_screen.jpg)
+![todo_screen](screenshots/todo_screen.jpg)
 ![todo_editing_screen](screenshots/todo_editing_screen.jpg)
 ![profile_editing](screenshots/profile_editing.jpg)
 ![completed_task](screenshots/completed_task.jpg)
