@@ -77,8 +77,11 @@ Android-приложение для управления вашими задач
 
 ## Установка
 
-Для установки приложения загрузите **[APK-file](https://github.com/radlance/FirebaseTodo/raw/master/FirebaseTodo.apk)**
+Для установки приложения загрузите **[APK-file](https://github.com/radlance/FirebaseTodo/raw/master/app/release/app-release.apk)**
 и откройте его на своем устройстве Android.
 Альтернативно вы можете
 клонировать репозиторий и создать приложение с помощью Android Studio.
 
+```
+git clone git@github.com:radlance/FirebaseTodo.git
+```
