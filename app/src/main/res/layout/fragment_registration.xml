@@ -130,6 +130,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
+            android:layout_height="wrap_content"
             android:id="@+id/button_register"
             style="@style/ButtonStyle"
             android:layout_width="0dp"

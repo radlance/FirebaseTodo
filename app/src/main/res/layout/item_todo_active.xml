@@ -36,7 +36,7 @@
             android:src="@drawable/ic_check"
             app:layout_constraintBottom_toBottomOf="@id/tv_todo"
             app:layout_constraintEnd_toStartOf="@id/iv_trash"
-            app:layout_constraintTop_toTopOf="@id/tv_title" />
+            app:layout_constraintTop_toTopOf="@id/tv_todo" />
 
         <ImageView
             android:id="@+id/iv_trash"
@@ -44,7 +44,7 @@
             android:layout_height="25dp"
             android:contentDescription="@string/trash"
             android:src="@drawable/ic_trash"
-            app:layout_constraintBottom_toBottomOf="@id/tv_title"
+            app:layout_constraintBottom_toBottomOf="@id/tv_todo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_todo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
