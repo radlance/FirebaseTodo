@@ -62,17 +62,16 @@ Android-приложение для управления вашими задач
 ---
 
 ## Экраны
+<div align="center">
 
-![welcome_screen](screenshots/welcome_screen.jpg)
-![login_screen](screenshots/login_screen.jpg)
-![forget_password_screen](screenshots/forget_password_screen.jpg)
-![registration_screen](screenshots/registration_screen.jpg)
-![todo_screen](screenshots/todo_screen.jpg)
-![todo_editing_screen](screenshots/todo_editing_screen.jpg)
-![profile_editing](screenshots/profile_editing.jpg)
-![completed_task](screenshots/completed_task.jpg)
+  ![welcome_screen](screenshots/welcome_screen.jpg)
+  ![login_screen](screenshots/login_screen.jpg)
+  ![registration_screen](screenshots/registration_screen.jpg)
+  ![todo_screen](screenshots/todo_screen.jpg)
+  ![todo_editing_screen](screenshots/todo_editing_screen.jpg)
+</div>
 
- 
+
 ---
 
 ## Установка
@@ -83,5 +82,5 @@ Android-приложение для управления вашими задач
 клонировать репозиторий и создать приложение с помощью Android Studio.
 
 ```
-git clone git@github.com:radlance/FirebaseTodo.git
+git clone https://github.com/radlance/FirebaseTodo.git
 ```
